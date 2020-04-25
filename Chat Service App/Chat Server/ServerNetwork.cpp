@@ -60,7 +60,6 @@ void ServerNetwork::ProcessPacket(sf::TcpSocket * client, sf::Packet & packet) {
 	}
 	else if (type == (MESSAGE | REQUEST)) {
 		packet << (sf::Int8)(MESSAGE | OK) << username << data;
-
 		BroadcastPacket(packet, client->getRemoteAddress(), client->getRemotePort());
 		logl("User " << username << " sending: '" << data << "'");
 	}
@@ -68,24 +67,20 @@ void ServerNetwork::ProcessPacket(sf::TcpSocket * client, sf::Packet & packet) {
 
 void ServerNetwork::ReceivePacket(sf::TcpSocket * client, size_t iterator){
      sf::Packet packet;
-     if(client->receive(packet) == sf::Socket::Disconnected){
-          DisconnectClient(client, iterator);
-     }else{
-		 ProcessPacket(client, packet);
-     }
+
+	 sf::Socket::Status status = client->receive(packet);
+     if(status == sf::Socket::Disconnected) DisconnectClient(client, iterator);
+	 else if (status == sf::Socket::Done) ProcessPacket(client, packet);
 }
 
 void ServerNetwork::ManagePackets(){
      while(true){
-          for(size_t iterator = 0; iterator < client_array.size(); iterator++){
-               ReceivePacket(client_array[iterator], iterator);
-          }
+          for(size_t iterator = 0; iterator < client_array.size(); iterator++) ReceivePacket(client_array[iterator], iterator);
           std::this_thread::sleep_for((std::chrono::milliseconds)10);
      }
 }
 
 void ServerNetwork::Run(){
      std::thread connetion_thread(&ServerNetwork::ConnectClients, this, &client_array);
-
      ManagePackets();
 }

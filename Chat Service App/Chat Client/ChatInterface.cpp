@@ -26,11 +26,13 @@ void ChatInterface::PrintMessage(std::string message) {
 
 void SendButtonCallback(Fl_Widget *, void * data) {
 	std::string input = chat_ui::mediator->chat_interface->message_input->value();
-	if (input.size() > 0 && input.size() < 256) {
-		chat_ui::mediator->chat_interface->message_input->value("");
-		chat_ui::mediator->chat_interface->PrintMessage("You: " + input);
-		Fl::focus(chat_ui::mediator->chat_interface->message_input);
-		chat_ui::mediator->Send(input);
+	if (input.size() < 256) {
+		if (input.size() > 0) {
+			chat_ui::mediator->chat_interface->message_input->value("");
+			chat_ui::mediator->chat_interface->PrintMessage("You: " + input);
+			Fl::focus(chat_ui::mediator->chat_interface->message_input);
+			chat_ui::mediator->Send(input);
+		}
 	}
 	else fl_alert("Input message can't have more than 256 characters.");
 }

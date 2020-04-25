@@ -17,10 +17,11 @@ void Network::Connect(const char * address, unsigned short port) {
 }
 
 void Network::Disconnect() {
+	isConnected = false;
 	local_socket.disconnect();
-	local_socket.setBlocking(false);
 	receiver_thread.join();
 	receiver_thread.~thread();
+	logl("Desconectado!");
 }
 
 bool Network::Send(sf::Int8 type, const std::string & data) {
@@ -38,7 +39,7 @@ bool Network::Send(sf::Int8 type, const std::string & data) {
 }
 
 bool Network::Receive(sf::Packet & packet) {
-	if (local_socket.receive(packet) == sf::Socket::Done)return true;
+	if (local_socket.receive(packet) == sf::Socket::Done) return true;
 	else {
 		isConnected = false;
 		return false;
@@ -46,7 +47,7 @@ bool Network::Receive(sf::Packet & packet) {
 }
 
 void Network::ReceivePackets(sf::TcpSocket * socket) {
-	while (true) {
+	while (isConnected) {
 		sf::Packet packet;
 		if (socket->receive(packet) == sf::Socket::Disconnected) isConnected = false;
 		else net::mediator->ProcessPacket(packet);

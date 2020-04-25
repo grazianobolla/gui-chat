@@ -42,12 +42,14 @@ void Mediator::ProcessPacket(sf::Packet & packet) {
 }
 
 void Mediator::StartChat() {
+	logl("Starting chat..");
 	login_interface->hide();
 	chat_interface->show();
 	network->StartReceiving();
 }
 
 void Mediator::StopChat() {
+	logl("Stopping chat..");
 	chat_interface->hide();
 	login_interface->show();
 	network->Disconnect();
