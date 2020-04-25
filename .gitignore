@@ -358,3 +358,5 @@ MigrationBackup/
 *.dll
 *.save
 *.depend
+*.cbp
+*.layout
