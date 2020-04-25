@@ -1,10 +1,16 @@
 #pragma once
 #include <thread>
-#include <SFML/Network.hpp>
 #include <iostream>
 
+#undef Status
+#undef None
+#undef BadRequest
+#include <SFML/Network.hpp>
+
 enum TYPE {
-	LOGIN, LOGIN_OK,
+     OK, ERROR,
+	LOGIN,
+	REGISTER,
 	MESSAGE
 };
 

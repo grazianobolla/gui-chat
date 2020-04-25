@@ -14,11 +14,11 @@ void Mediator::Login(const char * address, const std::string & username, const s
 	if (network.isConnected) {
 		network.Send(TYPE::LOGIN, password);
 
-		sf::Packet packet; bool logged_in;
+		sf::Packet packet; sf::Int8 server_response;
 		network.Receive(packet);
-		packet >> logged_in;
+		packet >> server_response;
 
-		if (logged_in) StartChat();
+		if (server_response == TYPE::OK) StartChat();
 		else fl_alert("Invalid credentials. (Are you registered?)");
 	}
 	else fl_alert("Could not connect to the server.");

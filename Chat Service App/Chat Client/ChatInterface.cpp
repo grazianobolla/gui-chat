@@ -15,6 +15,8 @@ ChatInterface::ChatInterface(void * data) : Fl_Double_Window(367, 244, "Chat Win
 }
 
 void SendButtonCallback(Fl_Widget *, void * data) {
-	Mediator * mediator = (Mediator *)data;
-	mediator->Send(std::string(input->value()));
+     if(input.size() > 0){
+          Mediator * mediator = (Mediator *)data;
+          mediator->Send(std::string(input->value()));
+	}
 }

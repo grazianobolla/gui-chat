@@ -356,3 +356,5 @@ MigrationBackup/
 *.vcxproj
 *.sln
 *.dll
+*.save
+*.depend

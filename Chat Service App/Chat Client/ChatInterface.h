@@ -1,5 +1,5 @@
 #pragma once
-#define WIN32
+//#define WIN32
 #include <FL/Fl.H>
 #include <FL/Fl_Double_Window.H>
 #include <FL/Fl_Text_Buffer.H>
