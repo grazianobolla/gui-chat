@@ -354,3 +354,5 @@ MigrationBackup/
 
 *.filters
 *.vcxproj
+*.sln
+*.dll
