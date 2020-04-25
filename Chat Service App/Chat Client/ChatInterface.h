@@ -22,3 +22,4 @@ public:
 };
 
 void SendButtonCallback(Fl_Widget *, void *);
+void CloseWindowCallback(Fl_Widget *, void *);

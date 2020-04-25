@@ -56,7 +56,7 @@ void ServerNetwork::ProcessPacket(sf::TcpSocket * client, sf::Packet & packet) {
 
 	if (type == (LOGIN | REQUEST)) {
 		logl("Login request from " << username << " and password " << data << " request type " << std::to_string(type));
-		SendPacket(client, LOGIN | FAIL);
+		SendPacket(client, LOGIN | OK);
 	}
 	else if (type == (MESSAGE | REQUEST)) {
 		packet << (sf::Int8)(MESSAGE | OK) << username << data;

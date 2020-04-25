@@ -1,10 +1,12 @@
 #include "Network.h"
 #include "Mediator.h"
 
-Mediator * mediator;
+namespace net{
+	Mediator * mediator;
+}
 
 Network::Network(void * data) {
-	mediator = (Mediator *)data;
+	net::mediator = (Mediator *)data;
 }
 
 void Network::Connect(const char * address, unsigned short port) {
@@ -26,9 +28,7 @@ bool Network::Send(sf::Int8 type, const std::string & data) {
 	packet << type << username << data;
 
 	if (packet.getDataSize() > 0) {
-		if (local_socket.send(packet) == sf::Socket::Done) {
-			return true;
-		}
+		if (local_socket.send(packet) == sf::Socket::Done) return true;
 		else {
 			isConnected = false;
 			return false;
@@ -38,9 +38,7 @@ bool Network::Send(sf::Int8 type, const std::string & data) {
 }
 
 bool Network::Receive(sf::Packet & packet) {
-	if (local_socket.receive(packet) == sf::Socket::Done) {
-		return true;
-	}
+	if (local_socket.receive(packet) == sf::Socket::Done)return true;
 	else {
 		isConnected = false;
 		return false;
@@ -51,7 +49,7 @@ void Network::ReceivePackets(sf::TcpSocket * socket) {
 	while (true) {
 		sf::Packet packet;
 		if (socket->receive(packet) == sf::Socket::Disconnected) isConnected = false;
-		else mediator->ProcessPacket(packet);
+		else net::mediator->ProcessPacket(packet);
 	}
 }
 
