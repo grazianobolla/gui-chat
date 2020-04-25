@@ -1,6 +1,5 @@
 #pragma once
 #include <thread>
-#include <iostream>
 
 #undef Status
 #undef None
@@ -21,6 +20,7 @@ public:
 	bool isConnected = false;
 	std::string username;
 
+     Network(void *);
 	void Connect(const char *, unsigned short);
 	void Disconnect();
 

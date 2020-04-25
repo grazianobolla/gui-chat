@@ -1,5 +1,7 @@
 #pragma once
 //#define WIN32
+#include <string>
+
 #include <FL/Fl.H>
 #include <FL/Fl_Double_Window.H>
 #include <FL/Fl_Text_Buffer.H>
@@ -16,6 +18,7 @@ public:
 	Fl_Button * send_button;
 
 	ChatInterface(void *);
+	void PrintMessage(std::string, std::string);
 };
 
 void SendButtonCallback(Fl_Widget *, void *);

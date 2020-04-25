@@ -2,20 +2,21 @@
 #include "Mediator.h"
 
 Mediator::Mediator() {
+     network = new Network(this);
 	login_interface = new LoginInterface(this);
 	chat_interface = new ChatInterface(this);
 }
 
 void Mediator::Login(const char * address, const std::string & username, const std::string & password){
 	std::cout << "Login Callback with parameters " << username << " " << password << "\n";
-	network.username = username;
-	network.Connect(address, 2525);
+	network->username = username;
+	network->Connect(address, 2525);
 
-	if (network.isConnected) {
-		network.Send(TYPE::LOGIN, password);
+	if (network->isConnected) {
+		network->Send(TYPE::LOGIN, password);
 
 		sf::Packet packet; sf::Int8 server_response;
-		network.Receive(packet);
+		network->Receive(packet);
 		packet >> server_response;
 
 		if (server_response == TYPE::OK) StartChat();
@@ -30,17 +31,17 @@ void Mediator::Register() {
 
 void Mediator::Send(const std::string & message) {
 	std::cout << "Send Callback with parameters " << message << "\n";
-	if (!network.Send(TYPE::MESSAGE, message)) fl_alert("Could not send the message.");
+	if (!network->Send(TYPE::MESSAGE, message)) fl_alert("Could not send the message.");
 }
 
 void Mediator::StartChat() {
 	login_interface->hide();
 	chat_interface->show();
-	network.StartReceiving();
+	network->StartReceiving();
 }
 
 void Mediator::StopChat() {
 	chat_interface->hide();
 	login_interface->show();
-	network.Disconnect();
+	network->Disconnect();
 }

@@ -67,7 +67,7 @@ void ServerNetwork::ReceivePacket(sf::TcpSocket * client, size_t iterator){
                packet << (sf::Int8)TYPE::MESSAGE << username << data;
 
                BroadcastPacket(packet, client->getRemoteAddress(), client->getRemotePort());
-               logl(username << ": " << data);
+               logl("User " << username << " sending: '" << data << "'");
           }
      }
 }

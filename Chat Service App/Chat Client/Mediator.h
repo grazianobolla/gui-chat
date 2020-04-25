@@ -11,12 +11,12 @@
 
 class Mediator {
 public:
-	Network network;
+	Network * network;
 	LoginInterface * login_interface;
 	ChatInterface * chat_interface;
 
 	Mediator();
-	
+
 	void Login(const char *, const std::string &, const std::string &);
 	void Register();
 	void Send(const std::string &);

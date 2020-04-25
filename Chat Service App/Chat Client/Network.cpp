@@ -1,4 +1,11 @@
 #include "Network.h"
+#include "Mediator.h"
+
+Mediator * mediator;
+
+Network::Network(void * data){
+     mediator = (Mediator *)data;
+}
 
 void Network::Connect(const char * address, unsigned short port) {
 	if (!isConnected) {
@@ -48,10 +55,7 @@ void Network::ReceivePackets(sf::TcpSocket * socket) {
 			sf::Int8 type; std::string sender_username, message;
 			packet >> type >> sender_username >> message;
 
-			if (type == TYPE::MESSAGE) {
-				//TODO: Print message to ChatClient
-				std::cout << sender_username << ": " << message << std::endl; //temp
-			}
+			if (type == TYPE::MESSAGE) mediator->chat_interface->PrintMessage(sender_username, message);
 		}
 	}
 }
