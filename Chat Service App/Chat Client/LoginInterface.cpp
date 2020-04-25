@@ -12,16 +12,25 @@ LoginInterface::LoginInterface(void * data) : Fl_Double_Window(242, 152, "Login 
 	login_button->callback(LoginButtonCallback, data);
 
 	register_button = new Fl_Button(145, 120, 90, 25, "Register");
+	register_button->callback(RegisterButtonCallback, data);
 	this->end();
 	this->show();
 }
 
 void LoginButtonCallback(Fl_Widget *, void * data) {
 	Mediator * mediator = (Mediator *)data;
-	mediator->Login();
+
+	std::string address = mediator->login_interface->server_address->value();
+	std::string username = mediator->login_interface->username_input->value();
+	std::string password = mediator->login_interface->password_input->value();
+
+	if (address.size() <= 0) fl_alert("The address is too short.");
+	else if (username.size() <= 6 || username.size() > 16) fl_alert("Username length must be between six and sixteen characters.");
+	else if (password.size() <= 6 || username.size() > 32) fl_alert("Password length must be between six and thirty-two characters.");
+	else mediator->Login(address.c_str(), username, password);
 }
 
 void RegisterButtonCallback(Fl_Widget *, void * data) {
 	Mediator * mediator = (Mediator *)data;
-	//mediator->Register();
+	mediator->Register();
 }

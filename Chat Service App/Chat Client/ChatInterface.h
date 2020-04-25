@@ -8,13 +8,13 @@
 #include <FL/Fl_Input.H>
 
 class ChatInterface : public Fl_Double_Window {
+public:
 	Fl_Text_Display * text_display;
 	Fl_Text_Buffer * text_display_buffer;
 
 	Fl_Input * message_input;
 	Fl_Button * send_button;
 
-public:
 	ChatInterface(void *);
 };
 
