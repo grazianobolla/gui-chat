@@ -14,14 +14,11 @@ void Mediator::Login(const char * address, const std::string & username, const s
 	if (network.isConnected) {
 		network.Send(TYPE::LOGIN, password);
 
-		sf::Packet packet; bool server_response;
+		sf::Packet packet; bool logged_in;
 		network.Receive(packet);
-		packet >> server_response;
+		packet >> logged_in;
 
-		if (server_response) {
-			login_interface->hide();
-			chat_interface->show();
-		}
+		if (logged_in) StartChat();
 		else fl_alert("Invalid credentials. (Are you registered?)");
 	}
 	else fl_alert("Could not connect to the server.");
@@ -34,4 +31,16 @@ void Mediator::Register() {
 void Mediator::Send(const std::string & message) {
 	std::cout << "Send Callback with parameters " << message << "\n";
 	if (!network.Send(TYPE::MESSAGE, message)) fl_alert("Could not send the message.");
+}
+
+void Mediator::StartChat() {
+	login_interface->hide();
+	chat_interface->show();
+	network.StartReceiving();
+}
+
+void Mediator::StopChat() {
+	chat_interface->hide();
+	login_interface->show();
+	network.Disconnect();
 }

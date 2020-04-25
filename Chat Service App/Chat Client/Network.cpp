@@ -39,3 +39,23 @@ bool Network::Receive(sf::Packet & packet) {
 		return false;
 	}
 }
+
+void Network::ReceivePackets(sf::TcpSocket * socket) {
+	while (true) {
+		sf::Packet packet;
+		if (socket->receive(packet) == sf::Socket::Disconnected) isConnected = false;
+		else {
+			sf::Int8 type; std::string sender_username, message;
+			packet >> type >> sender_username >> message;
+
+			if (type == TYPE::MESSAGE) {
+				//TODO: Print message to ChatClient
+				std::cout << sender_username << ": " << message << std::endl; //temp
+			}
+		}
+	}
+}
+
+void Network::StartReceiving() {
+	receiver_thread = std::thread(&Network::ReceivePackets, this, &local_socket);
+}

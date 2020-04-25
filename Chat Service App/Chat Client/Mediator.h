@@ -20,4 +20,7 @@ public:
 	void Login(const char *, const std::string &, const std::string &);
 	void Register();
 	void Send(const std::string &);
+
+	void StartChat();
+	void StopChat();
 };

@@ -1,6 +1,7 @@
 #pragma once
 #include <thread>
 #include <SFML/Network.hpp>
+#include <iostream>
 
 enum TYPE {
 	LOGIN, LOGIN_OK,
@@ -20,5 +21,6 @@ public:
 	bool Send(sf::Int8, const std::string &);
 	bool Receive(sf::Packet &);
 
-	void Login(const char *, const std::string &, const std::string &);
+	void ReceivePackets(sf::TcpSocket *);
+	void StartReceiving();
 };
