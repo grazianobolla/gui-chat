@@ -4,15 +4,10 @@
 #include <vector>
 #include <SFML/Network.hpp>
 
+#include "../Standard.h"
+
 #define logl(x) std::cout << x << std::endl
 #define log(x) std::cout << x
-
-enum TYPE {
-     OK, ERROR,
-	LOGIN,
-	REGISTER,
-	MESSAGE
-};
 
 class ServerNetwork{
      sf::TcpListener listener;
@@ -25,9 +20,9 @@ public:
      void DisconnectClient(sf::TcpSocket *, size_t);
 
      bool SendPacket(sf::TcpSocket *, sf::Int8);
+	 void BroadcastPacket(sf::Packet &, sf::IpAddress, unsigned short);
+	 void ProcessPacket(sf::TcpSocket *, sf::Packet &);
      void ReceivePacket(sf::TcpSocket *, size_t);
-
-     void BroadcastPacket(sf::Packet &, sf::IpAddress, unsigned short);
 
      void ManagePackets();
      void Run();

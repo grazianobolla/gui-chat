@@ -1,6 +1,6 @@
 #pragma once
-//#define WIN32
-#undef Status
+#define WIN32
+
 #include <FL/Fl.H>
 #include <FL/Fl_Return_Button.H>
 #include <FL/Fl_Input.H>

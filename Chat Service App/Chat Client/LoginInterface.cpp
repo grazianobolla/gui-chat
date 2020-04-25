@@ -1,12 +1,12 @@
 #include "LoginInterface.h"
 #include "Mediator.h"
 
-namespace log_ui{
-     Mediator * mediator;
+namespace log_ui {
+	Mediator * mediator;
 }
 
 LoginInterface::LoginInterface(void * data) : Fl_Double_Window(242, 152, "Login Window") {
-     log_ui::mediator = (Mediator *)data;
+	log_ui::mediator = (Mediator *)data;
 	server_address = new Fl_Input(100, 17, 115, 25, "Address");
 	server_address->value("localHost");
 

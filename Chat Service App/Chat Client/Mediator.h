@@ -21,6 +21,8 @@ public:
 	void Register();
 	void Send(const std::string &);
 
+	void ProcessPacket(sf::Packet &);
+
 	void StartChat();
 	void StopChat();
 };

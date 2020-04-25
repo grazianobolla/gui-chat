@@ -28,6 +28,14 @@ void ServerNetwork::DisconnectClient(sf::TcpSocket * socket_pointer, size_t posi
      client_array.erase(client_array.begin() + position);
 }
 
+bool ServerNetwork::SendPacket(sf::TcpSocket * socket, sf::Int8 type) {
+	sf::Packet packet;
+	packet << type;
+
+	if (socket->send(packet) == sf::Socket::Done) return true;
+	else return false;
+}
+
 void ServerNetwork::BroadcastPacket(sf::Packet & packet, sf::IpAddress exclude_address, unsigned short port){
      if(packet.getDataSize() > 0){
           for(size_t iterator = 0; iterator < client_array.size(); iterator++){
@@ -41,12 +49,21 @@ void ServerNetwork::BroadcastPacket(sf::Packet & packet, sf::IpAddress exclude_a
      }
 }
 
-bool ServerNetwork::SendPacket(sf::TcpSocket * socket, sf::Int8 type){
-     sf::Packet packet;
-     packet << type;
+void ServerNetwork::ProcessPacket(sf::TcpSocket * client, sf::Packet & packet) {
+	sf::Int8 type; std::string username, data;
+	packet >> type >> username >> data;
+	packet.clear();
 
-     if(socket->send(packet) == sf::Socket::Done) return true;
-     else return false;
+	if (type == (LOGIN | REQUEST)) {
+		logl("Login request from " << username << " and password " << data << " request type " << std::to_string(type));
+		SendPacket(client, LOGIN | FAIL);
+	}
+	else if (type == (MESSAGE | REQUEST)) {
+		packet << (sf::Int8)(MESSAGE | OK) << username << data;
+
+		BroadcastPacket(packet, client->getRemoteAddress(), client->getRemotePort());
+		logl("User " << username << " sending: '" << data << "'");
+	}
 }
 
 void ServerNetwork::ReceivePacket(sf::TcpSocket * client, size_t iterator){
@@ -54,21 +71,7 @@ void ServerNetwork::ReceivePacket(sf::TcpSocket * client, size_t iterator){
      if(client->receive(packet) == sf::Socket::Disconnected){
           DisconnectClient(client, iterator);
      }else{
-          sf::Int8 type;
-          std::string username, data;
-
-          packet >> type >> username >> data;
-          if(type == TYPE::LOGIN){
-               logl("Login request from " << username << " and password " << data << " request type " << std::to_string(type));
-               SendPacket(client, TYPE::OK);
-          }
-          else if(type == TYPE::MESSAGE){
-               packet.clear();
-               packet << (sf::Int8)TYPE::MESSAGE << username << data;
-
-               BroadcastPacket(packet, client->getRemoteAddress(), client->getRemotePort());
-               logl("User " << username << " sending: '" << data << "'");
-          }
+		 ProcessPacket(client, packet);
      }
 }
 

@@ -6,12 +6,7 @@
 #undef BadRequest
 #include <SFML/Network.hpp>
 
-enum TYPE {
-     OK, ERROR,
-	LOGIN,
-	REGISTER,
-	MESSAGE
-};
+#include "../Standard.h"
 
 class Network {
 	sf::TcpSocket local_socket;
@@ -20,7 +15,7 @@ public:
 	bool isConnected = false;
 	std::string username;
 
-     Network(void *);
+	Network(void *);
 	void Connect(const char *, unsigned short);
 	void Disconnect();
 

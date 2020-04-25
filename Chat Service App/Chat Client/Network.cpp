@@ -3,8 +3,8 @@
 
 Mediator * mediator;
 
-Network::Network(void * data){
-     mediator = (Mediator *)data;
+Network::Network(void * data) {
+	mediator = (Mediator *)data;
 }
 
 void Network::Connect(const char * address, unsigned short port) {
@@ -51,12 +51,7 @@ void Network::ReceivePackets(sf::TcpSocket * socket) {
 	while (true) {
 		sf::Packet packet;
 		if (socket->receive(packet) == sf::Socket::Disconnected) isConnected = false;
-		else {
-			sf::Int8 type; std::string sender_username, message;
-			packet >> type >> sender_username >> message;
-
-			if (type == TYPE::MESSAGE) mediator->chat_interface->PrintMessage(sender_username, message);
-		}
+		else mediator->ProcessPacket(packet);
 	}
 }
 
