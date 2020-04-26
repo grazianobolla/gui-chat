@@ -2,7 +2,6 @@
 
 ServerNetwork::ServerNetwork(unsigned short port) : listen_port(port){
      logl("Chat Server Started");
-
      if(listener.listen(listen_port) != sf::Socket::Done) logl("Could not listen");
 }
 

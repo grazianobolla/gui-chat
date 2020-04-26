@@ -5,6 +5,7 @@ Mediator::Mediator() {
 	network = new Network(this);
 	login_interface = new LoginInterface(this);
 	chat_interface = new ChatInterface(this);
+	Fl::lock();
 }
 
 void Mediator::Login(const char * address, const std::string & username, const std::string & password) {
@@ -38,7 +39,8 @@ void Mediator::ProcessPacket(sf::Packet & packet) {
 	sf::Int8 type; std::string sender_username, message;
 	packet >> type >> sender_username >> message;
 
-	if (type == (MESSAGE | OK)) chat_interface->PrintMessage(sender_username + ": " + message);
+	logl("Received from " << sender_username << ": '" << message << "'");
+	if (type == (MESSAGE | OK)) chat_interface->PrintMessage(sender_username + ": " + message, 'A');
 }
 
 void Mediator::StartChat() {

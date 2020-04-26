@@ -10,15 +10,16 @@
 #include <FL/Fl_Input.H>
 
 class ChatInterface : public Fl_Double_Window {
-public:
+	Fl_Text_Display::Style_Table_Entry style_table[2];
 	Fl_Text_Display * text_display;
 	Fl_Text_Buffer * text_display_buffer;
-
-	Fl_Input * message_input;
+	Fl_Text_Buffer * text_style_buffer;
 	Fl_Button * send_button;
+public:
+	Fl_Input * message_input;
 
 	ChatInterface(void *);
-	void PrintMessage(std::string);
+	void PrintMessage(std::string, char);
 };
 
 void SendButtonCallback(Fl_Widget *, void *);
