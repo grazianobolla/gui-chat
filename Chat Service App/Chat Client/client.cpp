@@ -42,8 +42,9 @@ void Client::Login(const std::string & username, const std::string & password) {
 	else fl_alert("Lost connection with the server.");
 }
 
-void Client::Register(const std::string & username, const std::string & password) {
+void Client::Register(std::string username, std::string password) {
 	logl("Register Callback with parameters " << username << " " << password);
+	network->username = username;
 
 	if (network->isConnected) {
 		network->Send(REGISTER | REQUEST, password);
@@ -53,7 +54,6 @@ void Client::Register(const std::string & username, const std::string & password
 		packet >> server_response;
 
 		if (server_response == (REGISTER | OK)) {
-			network->username = username;
 			StartChat();
 		}
 		else if (server_response == (REGISTER | FAIL)) fl_alert("Server database error, the user may already be registered.");
@@ -89,7 +89,7 @@ void Client::StopChat() {
 	register_interface->hide();
 	chat_interface->hide();
 	login_interface->show();
-	network->DisconnectWhileThread();
+	network->DisconnectThread();
 }
 
 void Client::LoginWindow() {

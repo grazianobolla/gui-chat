@@ -25,8 +25,7 @@ bool Database::GetQueryResult(const std::string & query, Data & data) {
 		sqlite3_free(db_error);
 		return false;
 	}
-	else if (data.rows > 0) return true;
-	return false;
+	else return true;
 }
 
 void Database::CloseDatabase() {

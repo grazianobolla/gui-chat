@@ -10,5 +10,5 @@ public:
 	void Start();
 	bool CheckUser(const std::string &, const std::string &);
 	bool AddUser(const std::string &, const std::string &);
-	void ProcessPacket(sf::TcpSocket *, sf::Packet &);
+	void ProcessPacket(sf::TcpSocket *, sf::Packet);
 };

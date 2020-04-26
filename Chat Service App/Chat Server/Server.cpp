@@ -29,37 +29,40 @@ bool Server::AddUser(const std::string & username, const std::string & password)
 	else return false;
 }
 
-void Server::ProcessPacket(sf::TcpSocket * client, sf::Packet & packet) {
+void Server::ProcessPacket(sf::TcpSocket * client, sf::Packet packet) {
 	sf::Int8 type; std::string username, data;
 	packet >> type >> username >> data;
 	packet.clear();
 
 	switch (type)
 	{
-	case (MESSAGE | REQUEST): {
-		packet << (sf::Int8)(MESSAGE | OK) << username << data;
-		server_network.BroadcastPacket(packet, client->getRemoteAddress(), client->getRemotePort());
-		logl("User " << username << " sending: '" << data << "'");
-		break;
-	}
-
-	case (LOGIN | REQUEST): {
-		logl("Login request from " << username << " and password " << data << " request type " << std::to_string(type));
-		if (CheckUser(username, data)) server_network.SendPacket(client, LOGIN | OK);
-		else server_network.SendPacket(client, LOGIN | FAIL);
-		break;
-	}
-
-	case (REGISTER | REQUEST): {
-		logl("Register request from " << username << " and password " << data << " request type " << std::to_string(type));
-		Data result;
-		database.GetQueryResult("SELECT username FROM users WHERE username = '" + username + "' LIMIT 1", result);
-		if (result.rows == 0 && database.ExecuteQuery("INSERT INTO users (username, password) VALUES ('" + username + "', '" + data + "')")) {
-			server_network.SendPacket(client, REGISTER | OK);
-			logl("Registered user '" << username << "'");
+		case (MESSAGE | REQUEST): {
+			packet << (sf::Int8)(MESSAGE | OK) << username << data;
+			server_network.BroadcastPacket(packet, client->getRemoteAddress(), client->getRemotePort());
+			logl("User " << username << " sending: '" << data << "'");
+			break;
 		}
-		else server_network.SendPacket(client, REGISTER | FAIL);
-		break;
-	}
+
+		case (LOGIN | REQUEST): {
+			logl("Login request from " << username << " and password " << data << " request type " << std::to_string(type));
+			if (CheckUser(username, data)) server_network.SendPacket(client, LOGIN | OK);
+			else server_network.SendPacket(client, LOGIN | FAIL);
+			break;
+		}
+
+		case (REGISTER | REQUEST): {
+			logl("Register request from " << username << " and password " << data << " request type " << std::to_string(type));
+			Data result;
+			if (!database.GetQueryResult("SELECT username FROM users WHERE username = '" + username + "' LIMIT 1", result)) logl("aqui!");
+			if (result.rows == 0 && database.ExecuteQuery("INSERT INTO users (username, password) VALUES ('" + username + "', '" + data + "')")) {
+				server_network.SendPacket(client, REGISTER | OK);
+				logl("Registered user '" << username << "'");
+			}
+			else server_network.SendPacket(client, REGISTER | FAIL);
+			break;
+		}
+
+		default:
+			break;
 	}
 }

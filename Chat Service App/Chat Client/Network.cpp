@@ -10,18 +10,20 @@ Network::Network(void * data) {
 }
 
 void Network::Connect(const char * address, unsigned short port) {
+	this->address = address;
 	if (!isConnected) {
 		if (local_socket.connect(address, port) == sf::Socket::Done) isConnected = true;
 		else isConnected = false;
 	}
 }
 
-void Network::DisconnectWhileThread() {
+void Network::DisconnectThread() {
 	isConnected = false;
 	local_socket.disconnect();
 	receiver_thread.join();
 	receiver_thread.~thread();
-	logl("Disconnected along the thread!");
+	Connect(address.c_str(), 2525);
+	logl("Disconnected the thread!");
 }
 
 void Network::Disconnect() {

@@ -22,7 +22,7 @@ public:
 	void Run();
 	bool Connect(const char *);
 	void Login(const std::string &, const std::string &);
-	void Register(const std::string &, const std::string &);
+	void Register(std::string, std::string);
 	void Send(const std::string &);
 
 	void ProcessPacket(sf::Packet &);
