@@ -5,7 +5,6 @@
 
 Client::Client() { }
 
-
 void Client::Run() {
 	network = new Network(this);
 	address_interface = new AddressInterface(this);
@@ -38,7 +37,7 @@ void Client::Login(const std::string & username, const std::string & password) {
 		packet >> server_response;
 
 		if (server_response == (LOGIN | OK)) StartChat();
-		else if(server_response == (LOGIN | FAIL)) fl_alert("Invalid credentials. (Are you registered?)");
+		else if (server_response == (LOGIN | FAIL)) fl_alert("Invalid credentials. (Are you registered?)");
 	}
 	else fl_alert("Lost connection with the server.");
 }
@@ -57,7 +56,7 @@ void Client::Register(const std::string & username, const std::string & password
 			network->username = username;
 			StartChat();
 		}
-		else if(server_response == (REGISTER | FAIL)) fl_alert("Server database error, the user may already be registered.");
+		else if (server_response == (REGISTER | FAIL)) fl_alert("Server database error, the user may already be registered.");
 	}
 	else fl_alert("Lost connection with the server.");
 }

@@ -28,7 +28,6 @@ void RegisterButtonCallback(Fl_Widget *, void *) {
 	else if (username.size() <= 4 || username.size() > 16) fl_alert("Username length must be between four and sixteen characters.");
 	else if (password.size() <= 6 || username.size() > 32) fl_alert("Password length must be between six and thirty-two characters.");
 	else {
-		logl("Register callback");
 		register_ui::client->Register(username, password);
 	}
 }

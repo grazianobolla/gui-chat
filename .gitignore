@@ -360,3 +360,4 @@ MigrationBackup/
 *.depend
 *.cbp
 *.layout
+*.db

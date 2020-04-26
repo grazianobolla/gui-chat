@@ -22,4 +22,4 @@ public:
 	void CloseDatabase();
 };
 
-static int callback(void * data, int , char **, char **);
+static int callback(void * data, int, char **, char **);

@@ -1,7 +1,7 @@
 #include "Network.h"
 #include "Client.h"
 
-namespace net{
+namespace net {
 	Client * client;
 }
 

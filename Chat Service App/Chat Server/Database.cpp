@@ -1,6 +1,6 @@
 #include "Database.h"
 
-Database::Database(){ }
+Database::Database() { }
 
 bool Database::OpenDatabase(const char * path) {
 	status = sqlite3_open(path, &database);
