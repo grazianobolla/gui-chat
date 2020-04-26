@@ -8,6 +8,7 @@
 #include <FL/Fl_Text_Display.H>
 #include <FL/Fl_Return_Button.H>
 #include <FL/Fl_Input.H>
+#include <FL/fl_ask.H>
 
 class ChatInterface : public Fl_Double_Window {
 	Fl_Text_Display::Style_Table_Entry style_table[2];

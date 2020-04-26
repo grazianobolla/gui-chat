@@ -5,7 +5,7 @@
 #include "LoginInterface.h"
 #include "ChatInterface.h"
 
-#define logl(x) std::cout << x << "\n"
+#define logl(x) std::cout << x << std::endl
 
 class Client {
 public:

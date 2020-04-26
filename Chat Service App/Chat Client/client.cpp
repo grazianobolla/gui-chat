@@ -1,6 +1,8 @@
 #include "Client.h"
 #include <FL/fl_ask.H>
 
+#include "../Standard.h"
+
 Client::Client() { }
 
 void Client::Run() {

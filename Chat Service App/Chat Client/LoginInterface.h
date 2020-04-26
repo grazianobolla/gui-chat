@@ -6,6 +6,7 @@
 #include <FL/Fl_Input.H>
 #include <FL/Fl_Secret_Input.H>
 #include <FL/Fl_Double_Window.H>
+#include <FL/fl_ask.H>
 
 class LoginInterface : public Fl_Double_Window {
 	Fl_Return_Button * login_button;

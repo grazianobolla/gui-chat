@@ -1,8 +1,16 @@
 #include "ServerNetwork.h"
+#include "Server.h"
 
-ServerNetwork::ServerNetwork(unsigned short port) : listen_port(port){
+Server * server;
+ServerNetwork::ServerNetwork(){}
+
+void ServerNetwork::Initialize(void * data) {
+	server = (Server *)data;
+}
+
+void ServerNetwork::Listen(unsigned short port) {
      logl("Chat Server Started");
-     if(listener.listen(listen_port) != sf::Socket::Done) logl("Could not listen");
+     if(listener.listen(port) != sf::Socket::Done) logl("Could not listen");
 }
 
 void ServerNetwork::ConnectClients(std::vector<sf::TcpSocket *> * client_array){
@@ -48,28 +56,12 @@ void ServerNetwork::BroadcastPacket(sf::Packet & packet, sf::IpAddress exclude_a
      }
 }
 
-void ServerNetwork::ProcessPacket(sf::TcpSocket * client, sf::Packet & packet) {
-	sf::Int8 type; std::string username, data;
-	packet >> type >> username >> data;
-	packet.clear();
-
-	if (type == (LOGIN | REQUEST)) {
-		logl("Login request from " << username << " and password " << data << " request type " << std::to_string(type));
-		SendPacket(client, LOGIN | OK);
-	}
-	else if (type == (MESSAGE | REQUEST)) {
-		packet << (sf::Int8)(MESSAGE | OK) << username << data;
-		BroadcastPacket(packet, client->getRemoteAddress(), client->getRemotePort());
-		logl("User " << username << " sending: '" << data << "'");
-	}
-}
-
 void ServerNetwork::ReceivePacket(sf::TcpSocket * client, size_t iterator){
      sf::Packet packet;
 
 	 sf::Socket::Status status = client->receive(packet);
      if(status == sf::Socket::Disconnected) DisconnectClient(client, iterator);
-	 else if (status == sf::Socket::Done) ProcessPacket(client, packet);
+	 else if (status == sf::Socket::Done) server->ProcessPacket(client, packet);
 }
 
 void ServerNetwork::ManagePackets(){

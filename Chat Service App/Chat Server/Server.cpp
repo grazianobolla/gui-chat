@@ -1,0 +1,56 @@
+#include "Server.h"
+#include "../Standard.h"
+
+Server::Server(){}
+
+void Server::Start() {
+	database.OpenDatabase("user_database.db");
+	database.ExecuteQuery("CREATE TABLE IF NOT EXISTS users (username VARCHAR(16), password VARCHAR(32))");
+
+	server_network.Initialize(this);
+	server_network.Listen(2525);
+	server_network.Run();
+	
+	database.CloseDatabase();
+}
+
+bool Server::CheckUser(const std::string & username, const std::string & password) {
+	Data results;
+
+	if (database.GetQueryResult("SELECT * FROM users WHERE username = '" + username + "' LIMIT 1", results)) {
+		if (results.vector[0] == username && results.vector[1] == password) return true;
+	}else return false;
+}
+
+bool Server::AddUser(const std::string & username, const std::string & password) {
+	std::string query = "INSERT INTO users (username, password) VALUES (" + username + ", " + password + ")";
+	if (database.ExecuteQuery(query.c_str())) return true;
+	else return false;
+}
+
+void Server::ProcessPacket(sf::TcpSocket * client, sf::Packet & packet) {
+	sf::Int8 type; std::string username, data;
+	packet >> type >> username >> data;
+	packet.clear();
+
+	if (type == (LOGIN | REQUEST)) {
+		logl("Login request from " << username << " and password " << data << " request type " << std::to_string(type));
+		if(CheckUser(username, data)) server_network.SendPacket(client, LOGIN | OK);
+		else server_network.SendPacket(client, LOGIN | FAIL);
+	}
+
+	else if (type == (REGISTER | REQUEST)) {
+		logl("Register request from " << username << " and password " << data << " request type " << std::to_string(type));
+		Data result;
+		database.GetQueryResult("SELECT username FROM users WHERE username = '" + username + "' LIMIT 1", result);
+		if (result.rows == 0) {
+			logl("User not registered, registering");
+		}else server_network.SendPacket(client, REGISTER | FAIL);
+	}
+
+	else if (type == (MESSAGE | REQUEST)) {
+		packet << (sf::Int8)(MESSAGE | OK) << username << data;
+		server_network.BroadcastPacket(packet, client->getRemoteAddress(), client->getRemotePort());
+		logl("User " << username << " sending: '" << data << "'");
+	}
+}

@@ -6,8 +6,6 @@
 #undef BadRequest
 #include <SFML/Network.hpp>
 
-#include "../Standard.h"
-
 class Network {
 	sf::TcpSocket local_socket;
 	std::thread receiver_thread;

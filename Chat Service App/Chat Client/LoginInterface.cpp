@@ -28,7 +28,7 @@ void LoginButtonCallback(Fl_Widget *, void * data) {
 	std::string password = log_ui::client->login_interface->password_input->value();
 
 	if (address.size() <= 0) fl_alert("The address is too short.");
-	else if (username.size() <= 4 || username.size() > 32) fl_alert("Username length must be between four and sixteen characters.");
+	else if (username.size() <= 4 || username.size() > 16) fl_alert("Username length must be between four and sixteen characters.");
 	else if (password.size() <= 6 || username.size() > 32) fl_alert("Password length must be between six and thirty-two characters.");
 	else log_ui::client->Login(address.c_str(), username, password);
 }

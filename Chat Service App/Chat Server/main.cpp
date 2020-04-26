@@ -1,8 +1,8 @@
-#include "ServerNetwork.h"
+#include "Server.h"
 
 int main(int agrc, char **argv)
 {
-	ServerNetwork network(2525);
-	network.Run();
+	Server server;
+	server.Start();
 	return 0;
 }
