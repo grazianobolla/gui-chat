@@ -1,12 +1,12 @@
 #include "Network.h"
-#include "Mediator.h"
+#include "Client.h"
 
 namespace net{
-	Mediator * mediator;
+	Client * Client;
 }
 
 Network::Network(void * data) {
-	net::mediator = (Mediator *)data;
+	net::Client = (Client *)data;
 }
 
 void Network::Connect(const char * address, unsigned short port) {
@@ -50,7 +50,7 @@ void Network::ReceivePackets(sf::TcpSocket * socket) {
 	while (isConnected) {
 		sf::Packet packet;
 		if (socket->receive(packet) == sf::Socket::Disconnected) isConnected = false;
-		else net::mediator->ProcessPacket(packet);
+		else net::Client->ProcessPacket(packet);
 	}
 }
 

@@ -1,12 +1,12 @@
 #include "LoginInterface.h"
-#include "Mediator.h"
+#include "Client.h"
 
 namespace log_ui {
-	Mediator * mediator;
+	Client * client;
 }
 
 LoginInterface::LoginInterface(void * data) : Fl_Double_Window(242, 152, "Login Window") {
-	log_ui::mediator = (Mediator *)data;
+	log_ui::client = (Client *)data;
 	server_address = new Fl_Input(100, 17, 115, 25, "Address");
 	server_address->value("localHost");
 
@@ -23,16 +23,16 @@ LoginInterface::LoginInterface(void * data) : Fl_Double_Window(242, 152, "Login 
 }
 
 void LoginButtonCallback(Fl_Widget *, void * data) {
-	std::string address = log_ui::mediator->login_interface->server_address->value();
-	std::string username = log_ui::mediator->login_interface->username_input->value();
-	std::string password = log_ui::mediator->login_interface->password_input->value();
+	std::string address = log_ui::client->login_interface->server_address->value();
+	std::string username = log_ui::client->login_interface->username_input->value();
+	std::string password = log_ui::client->login_interface->password_input->value();
 
 	if (address.size() <= 0) fl_alert("The address is too short.");
-	else if (username.size() <= 6 || username.size() > 16) fl_alert("Username length must be between six and sixteen characters.");
+	else if (username.size() <= 4 || username.size() > 32) fl_alert("Username length must be between four and sixteen characters.");
 	else if (password.size() <= 6 || username.size() > 32) fl_alert("Password length must be between six and thirty-two characters.");
-	else log_ui::mediator->Login(address.c_str(), username, password);
+	else log_ui::client->Login(address.c_str(), username, password);
 }
 
 void RegisterButtonCallback(Fl_Widget *, void * data) {
-	log_ui::mediator->Register();
+	log_ui::client->Register();
 }

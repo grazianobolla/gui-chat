@@ -1,12 +1,12 @@
 #include "ChatInterface.h"
-#include "Mediator.h"
+#include "Client.h"
 
 namespace chat_ui {
-	Mediator * mediator;
+	Client * client;
 }
 
 ChatInterface::ChatInterface(void * data) : Fl_Double_Window(367, 244, "Chat Window") {
-	chat_ui::mediator = (Mediator *)data;
+	chat_ui::client = (Client *)data;
 
 	//Style Colors
 	style_table[0] = { FL_RED, FL_COURIER, 16 };
@@ -38,18 +38,18 @@ void ChatInterface::PrintMessage(std::string message, char color) {
 }
 
 void SendButtonCallback(Fl_Widget *, void * data) {
-	std::string input = chat_ui::mediator->chat_interface->message_input->value();
+	std::string input = chat_ui::client->chat_interface->message_input->value();
 	if (input.size() < 256) {
 		if (input.size() > 0) {
-			chat_ui::mediator->chat_interface->message_input->value("");
-			chat_ui::mediator->chat_interface->PrintMessage("You: " + input, 'B');
-			Fl::focus(chat_ui::mediator->chat_interface->message_input);
-			chat_ui::mediator->Send(input);
+			chat_ui::client->chat_interface->message_input->value("");
+			chat_ui::client->chat_interface->PrintMessage("You: " + input, 'B');
+			Fl::focus(chat_ui::client->chat_interface->message_input);
+			chat_ui::client->Send(input);
 		}
 	}
 	else fl_alert("Input message can't have more than 256 characters.");
 }
 
 void CloseWindowCallback(Fl_Widget *, void * data) {
-	chat_ui::mediator->StopChat();
+	chat_ui::client->StopChat();
 }

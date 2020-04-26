@@ -9,13 +9,13 @@
 
 #define logl(x) std::cout << x << "\n"
 
-class Mediator {
+class Client {
 public:
 	Network * network;
 	LoginInterface * login_interface;
 	ChatInterface * chat_interface;
 
-	Mediator();
+	Client();
 
 	void Login(const char *, const std::string &, const std::string &);
 	void Register();

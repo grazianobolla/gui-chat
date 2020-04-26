@@ -8,13 +8,12 @@
 #include <FL/Fl_Double_Window.H>
 
 class LoginInterface : public Fl_Double_Window {
+	Fl_Return_Button * login_button;
+	Fl_Button * register_button;
 public:
 	Fl_Input * server_address;
 	Fl_Input * username_input;
 	Fl_Secret_Input * password_input;
-
-	Fl_Return_Button * login_button;
-	Fl_Button * register_button;
 
 	LoginInterface(void *);
 };
