@@ -2,11 +2,11 @@
 #include "Client.h"
 
 namespace net{
-	Client * Client;
+	Client * client;
 }
 
 Network::Network(void * data) {
-	net::Client = (Client *)data;
+	net::client = (Client *)data;
 }
 
 void Network::Connect(const char * address, unsigned short port) {
@@ -50,7 +50,7 @@ void Network::ReceivePackets(sf::TcpSocket * socket) {
 	while (isConnected) {
 		sf::Packet packet;
 		if (socket->receive(packet) == sf::Socket::Disconnected) isConnected = false;
-		else net::Client->ProcessPacket(packet);
+		else net::client->ProcessPacket(packet);
 	}
 }
 

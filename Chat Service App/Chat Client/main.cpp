@@ -2,6 +2,7 @@
 
 int main(int agrc, char **argv)
 {
-	Client Client;
+	Client client;
+	client.Run();
 	return Fl::run();
 }

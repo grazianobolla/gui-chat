@@ -1,7 +1,9 @@
-#include <iostream>
 #include "Client.h"
+#include <FL/fl_ask.H>
 
-Client::Client() {
+Client::Client() { }
+
+void Client::Run() {
 	network = new Network(this);
 	login_interface = new LoginInterface(this);
 	chat_interface = new ChatInterface(this);
@@ -9,7 +11,7 @@ Client::Client() {
 }
 
 void Client::Login(const char * address, const std::string & username, const std::string & password) {
-	std::cout << "Login Callback with parameters " << username << " " << password << "\n";
+	logl("Login Callback with parameters " << username << " " << password);
 	network->username = username;
 	network->Connect(address, 2525);
 
@@ -31,7 +33,7 @@ void Client::Register() {
 }
 
 void Client::Send(const std::string & message) {
-	std::cout << "Send Callback with parameters " << message << "\n";
+	logl("Send Callback with parameters " << message);
 	if (!network->Send(MESSAGE | REQUEST, message)) fl_alert("Could not send the message.");
 }
 

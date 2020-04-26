@@ -1,8 +1,6 @@
 #pragma once
 #include <iostream>
 
-#include <FL/fl_ask.H>
-
 #include "Network.h"
 #include "LoginInterface.h"
 #include "ChatInterface.h"
@@ -17,6 +15,7 @@ public:
 
 	Client();
 
+	void Run();
 	void Login(const char *, const std::string &, const std::string &);
 	void Register();
 	void Send(const std::string &);
