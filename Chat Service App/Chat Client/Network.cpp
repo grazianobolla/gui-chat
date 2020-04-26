@@ -16,12 +16,18 @@ void Network::Connect(const char * address, unsigned short port) {
 	}
 }
 
-void Network::Disconnect() {
+void Network::DisconnectWhileThread() {
 	isConnected = false;
 	local_socket.disconnect();
 	receiver_thread.join();
 	receiver_thread.~thread();
-	logl("Desconectado!");
+	logl("Disconnected along the thread!");
+}
+
+void Network::Disconnect() {
+	isConnected = false;
+	local_socket.disconnect();
+	logl("Disconnected!");
 }
 
 bool Network::Send(sf::Int8 type, const std::string & data) {

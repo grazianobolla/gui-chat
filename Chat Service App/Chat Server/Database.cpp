@@ -8,8 +8,8 @@ bool Database::OpenDatabase(const char * path) {
 	else return true;
 }
 
-bool Database::ExecuteQuery(const char * query) {
-	status = sqlite3_exec(database, query, callback, 0, &db_error);
+bool Database::ExecuteQuery(const std::string & query) {
+	status = sqlite3_exec(database, query.c_str(), callback, 0, &db_error);
 	if (status != SQLITE_OK) {
 		logl("Could not execute query");
 		sqlite3_free(db_error);

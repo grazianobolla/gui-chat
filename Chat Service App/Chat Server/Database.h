@@ -17,7 +17,7 @@ class Database {
 public:
 	Database();
 	bool OpenDatabase(const char *);
-	bool ExecuteQuery(const char *);
+	bool ExecuteQuery(const std::string &);
 	bool GetQueryResult(const std::string &, Data &);
 	void CloseDatabase();
 };

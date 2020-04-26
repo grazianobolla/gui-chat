@@ -16,6 +16,7 @@ public:
 	Network(void *);
 	void Connect(const char *, unsigned short);
 	void Disconnect();
+	void DisconnectWhileThread();
 
 	bool Send(sf::Int8, const std::string &);
 	bool Receive(sf::Packet &);

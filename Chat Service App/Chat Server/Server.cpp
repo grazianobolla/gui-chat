@@ -33,24 +33,32 @@ void Server::ProcessPacket(sf::TcpSocket * client, sf::Packet & packet) {
 	packet >> type >> username >> data;
 	packet.clear();
 
-	if (type == (LOGIN | REQUEST)) {
-		logl("Login request from " << username << " and password " << data << " request type " << std::to_string(type));
-		if(CheckUser(username, data)) server_network.SendPacket(client, LOGIN | OK);
-		else server_network.SendPacket(client, LOGIN | FAIL);
-	}
+	switch (type)
+	{
+		case (MESSAGE | REQUEST): {
+			packet << (sf::Int8)(MESSAGE | OK) << username << data;
+			server_network.BroadcastPacket(packet, client->getRemoteAddress(), client->getRemotePort());
+			logl("User " << username << " sending: '" << data << "'");
+			break;
+		}
 
-	else if (type == (REGISTER | REQUEST)) {
-		logl("Register request from " << username << " and password " << data << " request type " << std::to_string(type));
-		Data result;
-		database.GetQueryResult("SELECT username FROM users WHERE username = '" + username + "' LIMIT 1", result);
-		if (result.rows == 0) {
-			logl("User not registered, registering");
-		}else server_network.SendPacket(client, REGISTER | FAIL);
-	}
+		case (LOGIN | REQUEST): {
+			logl("Login request from " << username << " and password " << data << " request type " << std::to_string(type));
+			if (CheckUser(username, data)) server_network.SendPacket(client, LOGIN | OK);
+			else server_network.SendPacket(client, LOGIN | FAIL);
+			break;
+		}
 
-	else if (type == (MESSAGE | REQUEST)) {
-		packet << (sf::Int8)(MESSAGE | OK) << username << data;
-		server_network.BroadcastPacket(packet, client->getRemoteAddress(), client->getRemotePort());
-		logl("User " << username << " sending: '" << data << "'");
+		case (REGISTER | REQUEST): {
+			logl("Register request from " << username << " and password " << data << " request type " << std::to_string(type));
+			Data result;
+			database.GetQueryResult("SELECT username FROM users WHERE username = '" + username + "' LIMIT 1", result);
+			if (result.rows == 0 && database.ExecuteQuery("INSERT INTO users (username, password) VALUES ('" + username + "', '" + data + "')")) {
+				server_network.SendPacket(client, REGISTER | OK);
+				logl("Registered user '" << username << "'");
+			}
+			else server_network.SendPacket(client, REGISTER | FAIL);
+			break;
+		}
 	}
 }
