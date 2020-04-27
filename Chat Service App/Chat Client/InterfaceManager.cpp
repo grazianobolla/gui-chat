@@ -16,20 +16,24 @@ void InterfaceManager::HideAll() {
 
 void InterfaceManager::ShowAddressWindow() {
 	HideAll();
+	address_interface->position(790, 340);
 	address_interface->show();
 }
 
 void InterfaceManager::ShowLoginWindow() {
 	HideAll();
+	login_interface->position(790, 340);
 	login_interface->show();
 }
 
 void InterfaceManager::ShowRegisterWindow() {
 	HideAll();
+	register_interface->position(790, 340);
 	register_interface->show();
 }
 
 void InterfaceManager::ShowChatWindow() {
 	HideAll();
+	chat_interface->position(790, 340);
 	chat_interface->show();
 }
