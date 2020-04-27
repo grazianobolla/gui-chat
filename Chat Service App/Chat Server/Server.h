@@ -12,5 +12,5 @@ public:
 	bool AddUser(const std::string &, const std::string &);
 	void ProcessPacket(sf::TcpSocket *, sf::Packet);
 
-	void SendNotification(const std::string &);
+	void SendNotification(const std::string &, bool, sf::IpAddress = "localHost", unsigned short port = 0);
 };

@@ -31,7 +31,7 @@ void ServerNetwork::ConnectClients(std::vector<sf::TcpSocket *> * client_array) 
 
 void ServerNetwork::DisconnectClient(sf::TcpSocket * socket_pointer, size_t position) {
 	logl("Client " << socket_pointer->getRemoteAddress() << ":" << socket_pointer->getRemotePort() << " disconnected, removing");
-	server->SendNotification("User " + socket_pointer->getRemoteAddress().toString() + " disconnected.");
+	server->SendNotification("User " + socket_pointer->getRemoteAddress().toString() + " disconnected.", true, socket_pointer->getRemoteAddress(), socket_pointer->getRemotePort());
 	socket_pointer->disconnect();
 	delete(socket_pointer);
 	client_array.erase(client_array.begin() + position);
