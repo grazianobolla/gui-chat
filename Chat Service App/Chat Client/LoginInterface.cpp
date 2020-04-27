@@ -21,8 +21,8 @@ LoginInterface::LoginInterface(void * data) : Fl_Double_Window(242, 120, "Login 
 }
 
 void LoginButtonCallback(Fl_Widget *, void *) {
-	std::string username = log_ui::client->login_interface->username_input->value();
-	std::string password = log_ui::client->login_interface->password_input->value();
+	std::string username = log_ui::client->interface_manager->login_interface->username_input->value();
+	std::string password = log_ui::client->interface_manager->login_interface->password_input->value();
 
 	if (username.size() <= 4 || username.size() > 16) fl_alert("Username length must be between four and sixteen characters.");
 	else if (password.size() <= 6 || username.size() > 32) fl_alert("Password length must be between six and thirty-two characters.");
@@ -30,9 +30,9 @@ void LoginButtonCallback(Fl_Widget *, void *) {
 }
 
 void OpenRegisterWindowButtonCallback(Fl_Widget *, void *) {
-	log_ui::client->RegisterWindow();
+	log_ui::client->interface_manager->ShowRegisterWindow();
 }
 
 void CloseLoginWindowCallback(Fl_Widget *, void *) {
-	log_ui::client->AddressWindow();
+	log_ui::client->interface_manager->ShowAddressWindow();
 }

@@ -20,9 +20,9 @@ RegisterInterface::RegisterInterface(void * data) : Fl_Double_Window(315, 166, "
 }
 
 void RegisterButtonCallback(Fl_Widget *, void *) {
-	std::string username = register_ui::client->register_interface->username_input->value();
-	std::string password = register_ui::client->register_interface->password_input->value();
-	std::string repeat_password = register_ui::client->register_interface->repeat_password_input->value();
+	std::string username = register_ui::client->interface_manager->register_interface->username_input->value();
+	std::string password = register_ui::client->interface_manager->register_interface->password_input->value();
+	std::string repeat_password = register_ui::client->interface_manager->register_interface->repeat_password_input->value();
 
 	if (repeat_password != password) fl_alert("The passwords do not match.");
 	else if (username.size() <= 4 || username.size() > 16) fl_alert("Username length must be between four and sixteen characters.");
@@ -33,5 +33,5 @@ void RegisterButtonCallback(Fl_Widget *, void *) {
 }
 
 void CloseRegisterWindowCallback(Fl_Widget *, void *) {
-	register_ui::client->LoginWindow();
+	register_ui::client->interface_manager->ShowRegisterWindow();
 }

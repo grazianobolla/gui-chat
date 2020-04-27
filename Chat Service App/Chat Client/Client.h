@@ -2,10 +2,7 @@
 #include <iostream>
 
 #include "Network.h"
-#include "AddressInterface.h"
-#include "LoginInterface.h"
-#include "RegisterInterface.h"
-#include "ChatInterface.h"
+#include "InterfaceManager.h"
 
 #include "../Standard.h"
 
@@ -14,10 +11,7 @@
 class Client {
 public:
 	Network * network;
-	AddressInterface * address_interface;
-	LoginInterface * login_interface;
-	RegisterInterface * register_interface;
-	ChatInterface * chat_interface;
+	InterfaceManager * interface_manager;
 
 	Client();
 
@@ -30,8 +24,4 @@ public:
 
 	void ChatWindow();
 	void StopChat();
-
-	void LoginWindow();
-	void RegisterWindow();
-	void AddressWindow();
 };

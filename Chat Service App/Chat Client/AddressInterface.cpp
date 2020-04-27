@@ -17,7 +17,7 @@ AddressInterface::AddressInterface(void * data) : Fl_Double_Window(261, 90, "Con
 }
 
 void ConnectButtonCallback(Fl_Widget *, void *) {
-	if (address_ui::client->Connect(address_ui::client->address_interface->address_input->value())) {
-		address_ui::client->LoginWindow();
+	if (address_ui::client->Connect(address_ui::client->interface_manager->address_interface->address_input->value())) {
+		address_ui::client->interface_manager->ShowLoginWindow();
 	}
 }

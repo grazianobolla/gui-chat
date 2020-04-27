@@ -5,12 +5,8 @@ Client::Client() { }
 
 void Client::Run() {
 	network = new Network(this);
-	address_interface = new AddressInterface(this);
-	login_interface = new LoginInterface(this);
-	register_interface = new RegisterInterface(this);
-	chat_interface = new ChatInterface(this);
-
-	address_interface->show();
+	interface_manager = new InterfaceManager(this);
+	interface_manager->ShowAddressWindow();
 	Fl::lock();
 }
 
@@ -84,48 +80,16 @@ void Client::ProcessPacket(sf::Packet & packet) {
 	packet >> type >> sender_username >> message;
 
 	logl("Received from " << sender_username << ": '" << message << "'");
-	if (type == (MESSAGE | OK)) chat_interface->PrintMessage(sender_username + ": " + message, 'A');
-	else if(type == (NOTIFICATION | OK)) chat_interface->PrintMessage(message, 'C');
+	if (type == (MESSAGE | OK)) interface_manager->chat_interface->PrintMessage(sender_username + ": " + message, 'A');
+	else if(type == (NOTIFICATION | OK)) interface_manager->chat_interface->PrintMessage(message, 'C');
 }
 
 void Client::ChatWindow() {
-	address_interface->hide();
-	register_interface->hide();
-	login_interface->hide();
-	chat_interface->show();
+	interface_manager->ShowChatWindow();
 	network->StartReceiving();
 }
 
 void Client::StopChat() {
-	register_interface->hide();
-	chat_interface->hide();
-	login_interface->hide();
-	address_interface->show();
+	interface_manager->ShowAddressWindow();
 	network->DisconnectThread();
-	logl("Closed and Disconnected");
-}
-
-void Client::LoginWindow() {
-	address_interface->hide();
-	chat_interface->hide();
-	register_interface->hide();
-	login_interface->show();
-	logl("Opening Login Window");
-}
-
-void Client::RegisterWindow() {
-	address_interface->hide();
-	login_interface->hide();
-	chat_interface->hide();
-	register_interface->show();
-	logl("Opening Register Window");
-}
-
-void Client::AddressWindow() {
-	network->Disconnect();
-	login_interface->hide();
-	chat_interface->hide();
-	register_interface->hide();
-	address_interface->show();
-	logl("Opening Address Window");
 }

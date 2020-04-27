@@ -39,12 +39,12 @@ void ChatInterface::PrintMessage(std::string message, char color) {
 }
 
 void SendButtonCallback(Fl_Widget *, void * data) {
-	std::string input = chat_ui::client->chat_interface->message_input->value();
+	std::string input = chat_ui::client->interface_manager->chat_interface->message_input->value();
 	if (input.size() < 256) {
 		if (input.size() > 0) {
-			chat_ui::client->chat_interface->message_input->value("");
-			chat_ui::client->chat_interface->PrintMessage("You: " + input, 'B');
-			Fl::focus(chat_ui::client->chat_interface->message_input);
+			chat_ui::client->interface_manager->chat_interface->message_input->value("");
+			chat_ui::client->interface_manager->chat_interface->PrintMessage("You: " + input, 'B');
+			Fl::focus(chat_ui::client->interface_manager->chat_interface->message_input);
 			chat_ui::client->Send(input);
 		}
 	}
