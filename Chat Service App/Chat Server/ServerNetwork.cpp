@@ -31,6 +31,7 @@ void ServerNetwork::ConnectClients(std::vector<sf::TcpSocket *> * client_array) 
 
 void ServerNetwork::DisconnectClient(sf::TcpSocket * socket_pointer, size_t position) {
 	logl("Client " << socket_pointer->getRemoteAddress() << ":" << socket_pointer->getRemotePort() << " disconnected, removing");
+	server->SendNotification("User " + socket_pointer->getRemoteAddress().toString() + " disconnected.");
 	socket_pointer->disconnect();
 	delete(socket_pointer);
 	client_array.erase(client_array.begin() + position);
@@ -52,6 +53,17 @@ void ServerNetwork::BroadcastPacket(sf::Packet & packet, sf::IpAddress exclude_a
 				if (client->send(packet) != sf::Socket::Done) {
 					logl("Could not send packet on broadcast");
 				}
+			}
+		}
+	}
+}
+
+void ServerNetwork::BroadcastPacket(sf::Packet & packet) {
+	if (packet.getDataSize() > 0) {
+		for (size_t iterator = 0; iterator < client_array.size(); iterator++) {
+			sf::TcpSocket * client = client_array[iterator];
+			if (client->send(packet) != sf::Socket::Done) {
+				logl("Could not send packet on broadcast all");
 			}
 		}
 	}

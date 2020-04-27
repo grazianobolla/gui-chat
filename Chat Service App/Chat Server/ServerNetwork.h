@@ -19,6 +19,7 @@ public:
 
 	bool SendPacket(sf::TcpSocket *, sf::Int8);
 	void BroadcastPacket(sf::Packet &, sf::IpAddress, unsigned short);
+	void BroadcastPacket(sf::Packet &);
 	void ReceivePacket(sf::TcpSocket *, size_t);
 
 	void ManagePackets();

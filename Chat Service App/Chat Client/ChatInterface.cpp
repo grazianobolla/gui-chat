@@ -11,6 +11,7 @@ ChatInterface::ChatInterface(void * data) : Fl_Double_Window(367, 244, "Chat Win
 	//Style Colors
 	style_table[0] = { FL_RED, FL_COURIER, 16 };
 	style_table[1] = { FL_BLUE, FL_COURIER, 16 };
+	style_table[2] = { FL_DARK_YELLOW, FL_COURIER, 16 };
 
 	message_input = new Fl_Input(70, 205, 200, 25, "Message");
 

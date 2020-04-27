@@ -12,7 +12,7 @@ RegisterInterface::RegisterInterface(void * data) : Fl_Double_Window(315, 166, "
 	password_input = new Fl_Input(130, 52, 155, 25, "Password");
 	repeat_password_input = new Fl_Input(130, 85, 155, 25, "Repeat Password");
 
-	register_button = new Fl_Return_Button(15, 130, 120, 25, "Register");
+	register_button = new Fl_Return_Button(97, 130, 120, 25, "Register");
 	register_button->callback(RegisterButtonCallback);
 
 	this->callback(CloseRegisterWindowCallback);

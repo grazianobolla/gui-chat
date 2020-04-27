@@ -7,6 +7,8 @@
 #include "RegisterInterface.h"
 #include "ChatInterface.h"
 
+#include "../Standard.h"
+
 #define logl(x) std::cout << x << std::endl
 
 class Client {
@@ -24,11 +26,11 @@ public:
 	void Login(const std::string &, const std::string &);
 	void Register(std::string, std::string);
 	void Send(const std::string &);
-
 	void ProcessPacket(sf::Packet &);
 
-	void StartChat();
+	void ChatWindow();
 	void StopChat();
+
 	void LoginWindow();
 	void RegisterWindow();
 	void AddressWindow();

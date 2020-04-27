@@ -18,7 +18,7 @@ bool Server::CheckUser(const std::string & username, const std::string & passwor
 	Data results;
 
 	if (database.GetQueryResult("SELECT * FROM users WHERE username = '" + username + "' LIMIT 1", results)) {
-		if (results.vector[0] == username && results.vector[1] == password) return true;
+		if (results.rows > 0 && results.vector[0] == username && results.vector[1] == password) return true;
 	}
 	return false;
 }
@@ -45,7 +45,10 @@ void Server::ProcessPacket(sf::TcpSocket * client, sf::Packet packet) {
 
 		case (LOGIN | REQUEST): {
 			logl("Login request from " << username << " and password " << data << " request type " << std::to_string(type));
-			if (CheckUser(username, data)) server_network.SendPacket(client, LOGIN | OK);
+			if (CheckUser(username, data)) {
+				server_network.SendPacket(client, LOGIN | OK);
+				SendNotification("User " + username + " (" + client->getRemoteAddress().toString() + ") has logged in!");
+			}
 			else server_network.SendPacket(client, LOGIN | FAIL);
 			break;
 		}
@@ -65,4 +68,11 @@ void Server::ProcessPacket(sf::TcpSocket * client, sf::Packet packet) {
 		default:
 			break;
 	}
+}
+
+void Server::SendNotification(const std::string & message) {
+	sf::Packet packet;
+	packet << (sf::Int8)(NOTIFICATION | OK) << "SERVER" << message;
+	server_network.BroadcastPacket(packet);
+	logl("Sended from SERVER sending: '" << message << "'");
 }

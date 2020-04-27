@@ -22,8 +22,7 @@ void Network::DisconnectThread() {
 	local_socket.disconnect();
 	receiver_thread.join();
 	receiver_thread.~thread();
-	Connect(address.c_str(), 2525);
-	logl("Disconnected the thread!");
+	logl("Disconnected and stopped the thread!");
 }
 
 void Network::Disconnect() {
@@ -31,6 +30,7 @@ void Network::Disconnect() {
 	local_socket.disconnect();
 	logl("Disconnected!");
 }
+
 
 bool Network::Send(sf::Int8 type, const std::string & data) {
 	sf::Packet packet;

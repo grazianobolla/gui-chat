@@ -1,8 +1,6 @@
 #include "Client.h"
 #include <FL/fl_ask.H>
 
-#include "../Standard.h"
-
 Client::Client() { }
 
 void Client::Run() {
@@ -17,6 +15,7 @@ void Client::Run() {
 }
 
 bool Client::Connect(const char * address) {
+	network->isConnected = false;
 	network->Connect(address, 2525);
 	if (network->isConnected == false) {
 		fl_alert("Could not connect to the server.");
@@ -32,12 +31,20 @@ void Client::Login(const std::string & username, const std::string & password) {
 	if (network->isConnected) {
 		network->Send(LOGIN | REQUEST, password);
 
-		sf::Packet packet; sf::Int8 server_response;
-		network->Receive(packet);
-		packet >> server_response;
+		while (true) {
+			sf::Packet packet; sf::Int8 server_response;
+			network->Receive(packet);
+			packet >> server_response;
 
-		if (server_response == (LOGIN | OK)) StartChat();
-		else if (server_response == (LOGIN | FAIL)) fl_alert("Invalid credentials. (Are you registered?)");
+			if (server_response == (LOGIN | OK)) {
+				ChatWindow();
+				break;
+			}
+			else if (server_response == (LOGIN | FAIL)) {
+				fl_alert("Invalid credentials. (Are you registered?)");
+				break;
+			}
+		}
 	}
 	else fl_alert("Lost connection with the server.");
 }
@@ -49,14 +56,20 @@ void Client::Register(std::string username, std::string password) {
 	if (network->isConnected) {
 		network->Send(REGISTER | REQUEST, password);
 
-		sf::Packet packet; sf::Int8 server_response;
-		network->Receive(packet);
-		packet >> server_response;
+		while (true) {
+			sf::Packet packet; sf::Int8 server_response;
+			network->Receive(packet);
+			packet >> server_response;
 
-		if (server_response == (REGISTER | OK)) {
-			StartChat();
+			if (server_response == (REGISTER | OK)) {
+				ChatWindow();
+				break;
+			}
+			else if (server_response == (REGISTER | FAIL)) {
+				fl_alert("Server database error, the user may already be registered.");
+				break;
+			}
 		}
-		else if (server_response == (REGISTER | FAIL)) fl_alert("Server database error, the user may already be registered.");
 	}
 	else fl_alert("Lost connection with the server.");
 }
@@ -72,10 +85,10 @@ void Client::ProcessPacket(sf::Packet & packet) {
 
 	logl("Received from " << sender_username << ": '" << message << "'");
 	if (type == (MESSAGE | OK)) chat_interface->PrintMessage(sender_username + ": " + message, 'A');
+	else if(type == (NOTIFICATION | OK)) chat_interface->PrintMessage(message, 'C');
 }
 
-void Client::StartChat() {
-	logl("Starting chat");
+void Client::ChatWindow() {
 	address_interface->hide();
 	register_interface->hide();
 	login_interface->hide();
@@ -84,35 +97,35 @@ void Client::StartChat() {
 }
 
 void Client::StopChat() {
-	logl("Stopping chat");
-	address_interface->hide();
 	register_interface->hide();
 	chat_interface->hide();
-	login_interface->show();
+	login_interface->hide();
+	address_interface->show();
 	network->DisconnectThread();
+	logl("Closed and Disconnected");
 }
 
 void Client::LoginWindow() {
-	logl("Opening Login Window");
 	address_interface->hide();
 	chat_interface->hide();
 	register_interface->hide();
 	login_interface->show();
+	logl("Opening Login Window");
 }
 
 void Client::RegisterWindow() {
-	logl("Opening Register Window");
 	address_interface->hide();
 	login_interface->hide();
 	chat_interface->hide();
 	register_interface->show();
+	logl("Opening Register Window");
 }
 
 void Client::AddressWindow() {
-	logl("Opening Register Window");
 	network->Disconnect();
 	login_interface->hide();
 	chat_interface->hide();
 	register_interface->hide();
 	address_interface->show();
+	logl("Opening Address Window");
 }
