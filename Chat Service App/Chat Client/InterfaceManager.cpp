@@ -1,5 +1,11 @@
 #include "InterfaceManager.h"
 
+void BestPosition(Fl_Widget * widget, int & x, int & y) {
+	Fl::get_mouse(x, y);
+	x -= widget->w() / 2;
+	y -= widget->h() / 2;
+}
+
 InterfaceManager::InterfaceManager(void * data) {
 	address_interface = new AddressInterface(data);
 	login_interface = new LoginInterface(data);
@@ -16,24 +22,28 @@ void InterfaceManager::HideAll() {
 
 void InterfaceManager::ShowAddressWindow() {
 	HideAll();
-	address_interface->position(790, 340);
+	int x, y; BestPosition(address_interface, x, y);
+	address_interface->position(x, y);
 	address_interface->show();
 }
 
 void InterfaceManager::ShowLoginWindow() {
 	HideAll();
-	login_interface->position(790, 340);
+	int x, y; BestPosition(address_interface, x, y);
+	login_interface->position(x, y);
 	login_interface->show();
 }
 
 void InterfaceManager::ShowRegisterWindow() {
 	HideAll();
-	register_interface->position(790, 340);
+	int x, y; BestPosition(address_interface, x, y);
+	register_interface->position(x, y);
 	register_interface->show();
 }
 
 void InterfaceManager::ShowChatWindow() {
 	HideAll();
-	chat_interface->position(790, 340);
+	int x, y; BestPosition(address_interface, x, y);
+	chat_interface->position(x, y);
 	chat_interface->show();
 }

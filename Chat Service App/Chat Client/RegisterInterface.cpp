@@ -33,5 +33,5 @@ void RegisterButtonCallback(Fl_Widget *, void *) {
 }
 
 void CloseRegisterWindowCallback(Fl_Widget *, void *) {
-	register_ui::client->interface_manager->ShowRegisterWindow();
+	register_ui::client->interface_manager->ShowLoginWindow();
 }
