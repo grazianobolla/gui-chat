@@ -14,6 +14,7 @@ void Server::Start() {
 	database.CloseDatabase();
 }
 
+//Checks in the database for an entry containing "username" and "password" (Checks if the user is registered)
 bool Server::CheckUser(const std::string & username, const std::string & password) {
 	Data results;
 
@@ -23,12 +24,14 @@ bool Server::CheckUser(const std::string & username, const std::string & passwor
 	return false;
 }
 
+
 bool Server::AddUser(const std::string & username, const std::string & password) {
 	std::string query = "INSERT INTO users (username, password) VALUES (" + username + ", " + password + ")";
 	if (database.ExecuteQuery(query.c_str())) return true;
 	else return false;
 }
 
+//Receives a packet from any client and decides what to do with it
 void Server::ProcessPacket(sf::TcpSocket * client, sf::Packet packet) {
 	sf::Int8 type; std::string username, data;
 	packet >> type >> username >> data;
@@ -70,6 +73,7 @@ void Server::ProcessPacket(sf::TcpSocket * client, sf::Packet packet) {
 	}
 }
 
+//Sends a message with the NOTIFICATION flag
 void Server::SendNotification(const std::string & message, bool to_all, sf::IpAddress exclude_address, unsigned short port) {
 	sf::Packet packet;
 	packet << (sf::Int8)(NOTIFICATION | OK) << "SERVER" << message;

@@ -20,6 +20,7 @@ bool Client::Connect(const char * address) {
 	else return true;
 }
 
+//Sends "Login" request to the server, and waits for a proper answer
 void Client::Login(const std::string & username, const std::string & password) {
 	logl("Login Callback with parameters " << username << " " << password);
 	network->username = username;
@@ -45,6 +46,7 @@ void Client::Login(const std::string & username, const std::string & password) {
 	else fl_alert("Lost connection with the server.");
 }
 
+//Sends "Register" request to the server, and waits for a proper answer
 void Client::Register(std::string username, std::string password) {
 	logl("Register Callback with parameters " << username << " " << password);
 	network->username = username;
@@ -70,11 +72,13 @@ void Client::Register(std::string username, std::string password) {
 	else fl_alert("Lost connection with the server.");
 }
 
+//Sends "Message" request to the server
 void Client::Send(const std::string & message) {
 	logl("Send Callback with parameters " << message);
 	if (!network->Send(MESSAGE | REQUEST, message)) fl_alert("Could not send the message.");
 }
 
+//Receives a packet from the server, and decides what to do with it
 void Client::ProcessPacket(sf::Packet & packet) {
 	sf::Int8 type; std::string sender_username, message;
 	packet >> type >> sender_username >> message;
@@ -88,11 +92,13 @@ void Client::ProcessPacket(sf::Packet & packet) {
 	}
 }
 
+//Starts the chat window and the thread
 void Client::ChatWindow() {
 	interface_manager->ShowChatWindow();
 	network->StartReceiving();
 }
 
+//Stops the thread and closes the chat window
 void Client::StopChat() {
 	interface_manager->ShowAddressWindow();
 	network->DisconnectThread();

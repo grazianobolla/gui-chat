@@ -18,6 +18,7 @@ bool Database::ExecuteQuery(const std::string & query) {
 	else return true;
 }
 
+//Gets the result from the database and saves it on the Data reference
 bool Database::GetQueryResult(const std::string & query, Data & data) {
 	status = sqlite3_exec(database, query.c_str(), callback, &data, &db_error);
 	if (status != SQLITE_OK) {

@@ -45,6 +45,7 @@ bool ServerNetwork::SendPacket(sf::TcpSocket * socket, sf::Int8 type) {
 	else return false;
 }
 
+//Sends a packet to all clients excluding the one defined in exclude_address and port
 void ServerNetwork::BroadcastPacket(sf::Packet & packet, sf::IpAddress exclude_address, unsigned short port) {
 	if (packet.getDataSize() > 0) {
 		for (size_t iterator = 0; iterator < client_array.size(); iterator++) {
@@ -58,6 +59,7 @@ void ServerNetwork::BroadcastPacket(sf::Packet & packet, sf::IpAddress exclude_a
 	}
 }
 
+//Sends a packet to every client
 void ServerNetwork::BroadcastPacket(sf::Packet & packet) {
 	if (packet.getDataSize() > 0) {
 		for (size_t iterator = 0; iterator < client_array.size(); iterator++) {
@@ -81,6 +83,7 @@ void ServerNetwork::ReceivePacket(sf::TcpSocket * client, size_t iterator) {
 	}
 }
 
+//This is executed on a different thread, it will receive incoming packets
 void ServerNetwork::ManagePackets() {
 	while (true) {
 		for (size_t iterator = 0; iterator < client_array.size(); iterator++) ReceivePacket(client_array[iterator], iterator);
