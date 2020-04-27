@@ -73,8 +73,12 @@ void ServerNetwork::ReceivePacket(sf::TcpSocket * client, size_t iterator) {
 	sf::Packet packet;
 
 	sf::Socket::Status status = client->receive(packet);
-	if (status == sf::Socket::Disconnected) DisconnectClient(client, iterator);
-	else if (status == sf::Socket::Done) server->ProcessPacket(client, packet);
+	if (status == sf::Socket::Disconnected) {
+		DisconnectClient(client, iterator);
+	}
+	else if (status == sf::Socket::Done) {
+		server->ProcessPacket(client, packet);
+	}
 }
 
 void ServerNetwork::ManagePackets() {

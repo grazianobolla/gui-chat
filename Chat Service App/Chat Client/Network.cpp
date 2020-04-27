@@ -12,8 +12,12 @@ Network::Network(void * data) {
 void Network::Connect(const char * address, unsigned short port) {
 	this->address = address;
 	if (!isConnected) {
-		if (local_socket.connect(address, port) == sf::Socket::Done) isConnected = true;
-		else isConnected = false;
+		if (local_socket.connect(address, port) == sf::Socket::Done) {
+			isConnected = true;
+		}
+		else {
+			isConnected = false;
+		}
 	}
 }
 
@@ -57,8 +61,12 @@ bool Network::Receive(sf::Packet & packet) {
 void Network::ReceivePackets(sf::TcpSocket * socket) {
 	while (isConnected) {
 		sf::Packet packet;
-		if (socket->receive(packet) == sf::Socket::Disconnected) isConnected = false;
-		else net::client->ProcessPacket(packet);
+		if (socket->receive(packet) == sf::Socket::Disconnected) {
+			isConnected = false;
+		}
+		else {
+			net::client->ProcessPacket(packet);
+		}
 	}
 }
 

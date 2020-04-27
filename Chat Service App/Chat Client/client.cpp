@@ -27,7 +27,7 @@ void Client::Login(const std::string & username, const std::string & password) {
 	if (network->isConnected) {
 		network->Send(LOGIN | REQUEST, password);
 
-		while (true) {
+		while (network->isConnected) {
 			sf::Packet packet; sf::Int8 server_response;
 			network->Receive(packet);
 			packet >> server_response;
@@ -52,7 +52,7 @@ void Client::Register(std::string username, std::string password) {
 	if (network->isConnected) {
 		network->Send(REGISTER | REQUEST, password);
 
-		while (true) {
+		while (network->isConnected) {
 			sf::Packet packet; sf::Int8 server_response;
 			network->Receive(packet);
 			packet >> server_response;
@@ -80,8 +80,12 @@ void Client::ProcessPacket(sf::Packet & packet) {
 	packet >> type >> sender_username >> message;
 
 	logl("Received from " << sender_username << ": '" << message << "'");
-	if (type == (MESSAGE | OK)) interface_manager->chat_interface->PrintMessage(sender_username + ": " + message, 'A');
-	else if(type == (NOTIFICATION | OK)) interface_manager->chat_interface->PrintMessage(message, 'C');
+	if (type == (MESSAGE | OK)) {
+		interface_manager->chat_interface->PrintMessage(sender_username + ": " + message, 'A');
+	}
+	else if (type == (NOTIFICATION | OK)) {
+		interface_manager->chat_interface->PrintMessage(message, 'C');
+	}
 }
 
 void Client::ChatWindow() {
